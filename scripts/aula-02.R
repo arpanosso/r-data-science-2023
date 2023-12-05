@@ -227,12 +227,11 @@ source("R/minhas-funcoes.R")
 
 # Criar a função para o cálculo do erro padrão da
 # média
-erro_padrao _media(y)
+erro_padrao_media(y)
 
 # Criar a função para o cálculo do coeficiente de
 # variação
 coef_varia(y)
-
 
 # Chamando o resumo estatístico
 resumo_estatistico(y)
