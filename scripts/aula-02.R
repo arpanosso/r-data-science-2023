@@ -139,32 +139,121 @@ x <- 1:5
 y <- c(2.1, 8.9, 18.7, 32.3, 50.2)
 plot(x,y,
      main = "Gráfico de Dispersão",
-     cex = 2,
-     pch = 16,
-     col = "red",
+     cex = 2, # tamanho marcador
+     pch = 21, # marcador
+     col = "red", # cor marcador
+     bg = "gray",
      xlab = "Eixo X",
      ylab = "Eixo Y",
-     cex.lab = 1.4,
-     las = 1,
-     ylim = c(0, 55)
+     cex.lab = 1.4, # tamanho fonte labs eixo
+     las = 1, # números do eixo Y vertical
+     ylim = c(0, 55) # limites de y
+     #type="S" # tipos de gráfico
      )
+# ajuste quadrático
+curve(-0.44+0.81714*x+1.85714*x^2,
+      add=TRUE, col="red")
 abline(h = mean(y), lty =2, col="blue")
 text(x,y+2.5,label=y)
+?? base::plot # help para a função plot
+# Ajuste Linear
+modelo_linear <- lm(y ~ x)
+abline(modelo_linear,col="red",lwd=2)
+modelo_linear
+summary.lm(modelo_linear)
 
-#
+# Ajuste de mínimos quadrados linear
+X <- matrix(0,5,ncol=2)
+X[,1] <- 1
+X[,2] <- x
+X
+solve(t(X) %*% X) %*% t(X) %*% y
 
-
-
-
-
-
-
-
-
-
-
+# Ajuste de mínimos quadrados Quadrático
+X <- matrix(0,5,ncol=3)
+X[,1] <- 1
+X[,2] <- x
+X[,3] <- x^2
+X
+solve(t(X) %*% X) %*% t(X) %*% y
+x2 <- x^2
+modelo_quadratico <- lm(y~x+x2)
+summary.lm(modelo_quadratico)
 # Realize um ajuste polinomial de segunda ordem
 # onde a matriz de coeficiente BETA
 # podrá se estimada por:
 # BETA = (X^T.X)^(-1) X^T Y
+
+
+# Estatística Descritiva -------------------------------------------------
+# Calular a somatória, a média e a mediana de y
+sum(y)
+mean(y)
+median(y)
+
+# Calular os desvios (y - media_y) e provar que a
+# soma dos desvios é igual a zero...
+y - mean(y)
+round(sum(y-mean(y)))
+
+# Encontrar o tamanho de y, seu máximo e seu mínimo
+length(y)
+max(y)
+min(y)
+
+# Calcular primeiro, segundo e terceiro quartil de y.
+quantile(y,0.25)
+quantile(y,0.50)
+quantile(y,0.75)
+
+# Soma de Quadrados dos Desvios
+sum((y - mean(y))^2)
+
+# Variância
+sum((y - mean(y))^2)/(5-1)
+var(y)
+
+# Devio Padrão
+sqrt(var(y))
+sd(y)
+
+# Erro padrao da média
+s <- sd(y)
+n <- length(y)
+s/sqrt(n)
+
+# Criar a função para o cálculo do erro padrão da
+# média
+erro_padrao_media <- function(vetor){
+  s <- sd(vetor)
+  n <- length(vetor)
+  epm <- s/sqrt(n)
+  return(epm)
+}
+erro_padrao_media(y)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
