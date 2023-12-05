@@ -227,7 +227,7 @@ source("R/minhas-funcoes.R")
 
 # Criar a função para o cálculo do erro padrão da
 # média
-erro_padrao_media(y)
+erro_padrao _media(y)
 
 # Criar a função para o cálculo do coeficiente de
 # variação
