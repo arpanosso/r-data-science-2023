@@ -222,22 +222,20 @@ s <- sd(y)
 n <- length(y)
 s/sqrt(n)
 
+# Carregandos minhas funções no ambiente de trabalho
+source("R/minhas-funcoes.R")
+
 # Criar a função para o cálculo do erro padrão da
 # média
-erro_padrao_media <- function(vetor){
-  s <- sd(vetor)
-  n <- length(vetor)
-  epm <- s/sqrt(n)
-  return(epm)
-}
 erro_padrao_media(y)
 
+# Criar a função para o cálculo do coeficiente de
+# variação
+coef_varia(y)
 
 
-
-
-
-
+# Chamando o resumo estatístico
+resumo_estatistico(y)
 
 
 
