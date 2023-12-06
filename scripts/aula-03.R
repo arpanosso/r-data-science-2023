@@ -1,31 +1,49 @@
-# Data:
-# Programado por:
+# Data:06/12/2023
+# Programado por: Alan R Panosso
 
 # Pacotes necessários:
 library(tidyverse)
 library(readxl)
 source("R/minhas-funcoes.R")
 
-
-
 # Valores perdidos - NAs --------------------------------------------------
 # Valores faltantes NA
-## Cuidado pois são fontes de propagação de ERRO no código.
+## Cuidado pois são fontes de propagação
+## de ERRO no código.
+NA ## Valor perdido, não disponível
 
 # Criando um vetor, aplicando a função média
-
 ## NA não funciona com operadores relacionais
-
 ## Função is.na()
-
 ## Contar o número de NAs no vetor y
-
 ## Contar o número de não NAs no vetor y
+x <- 360
+is.vector(x)
+is.numeric(x)
+is.data.frame(x)
+is.character(x)
+
+y <- c(24, 28, 32, 14, 16)
+mean(y)
+y[3] <- NA
+mean(y)
+4*4
+NA*4
+y >=10
+mean(y, na.rm = TRUE)
+# y == NA
+sum(is.na(y)) #contando NAs
+sum(!is.na(y)) #conta os não NAs
 
 ## Função para contar NA
+contar_nas(y)
 
 # Faxina dos dados geomorfologia ------------------------------------------
 # Realizar a faxina nos dados de geomorfologia
+library(readxl)
+geomorfologia <- read_excel(
+  "data-raw/geomorfologia.xlsx") %>%
+  janitor::clean_names()
 
 # Quantas suerfícies e tipos de solo estão presentes na base?
 

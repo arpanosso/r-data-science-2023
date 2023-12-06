@@ -44,7 +44,8 @@ resumo_estatistico <- function(vetor){
   return(saida)
 }
 
-
+# função para contar NAs
+contar_nas <- function(vetor) sum(is.na(vetor))
 
 
 
