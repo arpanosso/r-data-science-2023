@@ -45,29 +45,87 @@ geomorfologia <- read_excel(
   "data-raw/geomorfologia.xlsx") %>%
   janitor::clean_names()
 
-# Quantas suerfícies e tipos de solo estão presentes na base?
+# Quantas superfícies e tipos de solo estão presentes na base?
+geomorfologia %>%
+  pull(sup) %>%
+  unique()
+
+geomorfologia %>%
+  pull(solo) %>%
+  unique()
 
 ## Observar a estrutura dos dados
+geomorfologia %>% str()
+geomorfologia %>% glimpse()
+# install.packages("skimr")
+geomorfologia %>%  skimr::skim()
 
 # alterar o nome da variável relacao_silte_argila para
 # silte_argila
 # alterar o nome da variável p para p_resina
 # altear o nome da variável t para ctc
+geomorfologia <- geomorfologia %>%
+  rename(
+    silte_argila = relacao_silte_argila,
+    p_resina = p,
+    ctc = t,
+    ph = p_h
+  )
+geomorfologia %>% glimpse()
 
 # Salvar uma versão em rds na pasta data
+write_rds(geomorfologia,"data/geomorfologia.rds")
 
 # leia novamente esse arquivo rds...
-
+geomorfologia <- read_rds("data/geomorfologia.rds")
 
 # Verbos do dyplr ---------------------------------------------------------
+# VERBO select
+# selecionar solo, sup, x e p_resina
+geomorfologia %>%
+  select(sup, solo, x, p_resina)
+
+# selecionar de p_resima a v
+geomorfologia %>%
+  select(p_resina:v)
+
+# selecionar todas menos sup, solo, x e amostra
+geomorfologia %>%
+  select(- (sup:x) )
+
 # VERBOS summarise e group_by
 # Calcule a média para cada variável numérica
+geomorfologia %>%
+  summarise(across(amg:v, ~mean(.)))
+
+geomorfologia %>%
+  summarise(across(where(is.numeric), mean))
 
 # Calcule um resumo estatístico para cada variável numérica
+geomorfologia %>%
+  summarise(across(where(is.numeric),
+                   resumo_estatistico))
 
 # Calcule a média do pH para cada superfície.
+geomorfologia %>%
+  group_by(sup) %>%
+  summarise(media_ph = mean(ph, na.rm = TRUE))
 
 # Calcule a média e variância da argila para cada solo.
+geomorfologia %>%
+  group_by(solo) %>%
+  summarise(
+    media_argila = mean(argila, na.rm = TRUE),
+    variancia_argila = var(argila, na.rm = TRUE)
+  )
+
+# Calcule o resumo estatistico da argila para cada solo.
+geomorfologia %>%
+  group_by(solo) %>%
+  summarise(
+    esta_desc_argila = resumo_estatistico(argila)
+  )
+
 
 # VERBO filter, vamos filtrar:
 # Todas as variáveis para a SUP == "I"

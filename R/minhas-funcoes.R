@@ -1,7 +1,7 @@
 # Minhas funções
 # Função para o cálculo do erro padrão da média
 erro_padrao_media <- function(vetor){
-  s <- sd(vetor)
+  s <- sd(vetor,na.rm = TRUE)
   n <- length(vetor)
   epm <- s/sqrt(n)
   return(epm)
@@ -9,22 +9,22 @@ erro_padrao_media <- function(vetor){
 
 # Função para calcular o CV
 coef_varia <- function(vetor){
-  s <- sd(vetor)
-  media <- mean(vetor)
+  s <- sd(vetor,na.rm = TRUE)
+  media <- mean(vetor,na.rm = TRUE)
   cv <- s/media*100
   return(cv)
 }
 
 # Função de Resumo Estatístico
 resumo_estatistico <- function(vetor){
-  media <- mean(vetor)
-  variancia <- var(vetor)
+  media <- mean(vetor,na.rm = TRUE)
+  variancia <- var(vetor,na.rm = TRUE)
   cv <- coef_varia(vetor)
   p_normalidade <- shapiro.test(vetor)
 
   saida <- c(
     N = length(vetor),
-    Soma = sum(vetor),
+    Soma = sum(vetor,na.rm = TRUE),
     Media=media,
     Minimo = min(vetor),
     Q1 = quantile(vetor,0.25),
