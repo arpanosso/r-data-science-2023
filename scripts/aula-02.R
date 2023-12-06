@@ -234,7 +234,7 @@ erro_padrao_media(y)
 coef_varia(y)
 
 # Chamando o resumo estatístico
-resumo_estatistico(y)
+round(resumo_estatistico(y), 5)
 
 
 
