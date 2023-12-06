@@ -129,30 +129,226 @@ geomorfologia %>%
 
 # VERBO filter, vamos filtrar:
 # Todas as variáveis para a SUP == "I"
+geomorfologia %>%
+  filter(sup == "I") %>%
+  View()
 
 # Vamos selecionar somente os solos do tipo LV
+geomorfologia %>%
+  filter(solo == "LV") %>%
+  View()
 
-# Vamos selecionar somente os solos do tipo LV com teor de
-# argila maiores ou iguais a 20%
+# Vamos selecionar todos os PVs
+geomorfologia %>%
+  filter( str_detect(solo,"PV|R") ) %>%
+  View()
+
+# Vamos selecionar somente os solos do tipo LV
+# com teor de argila maiores ou iguais a 20%
+geomorfologia %>%
+  filter(solo == "LV", argila >= 20) %>%
+  select(solo, argila) %>%
+  View()
+
+geomorfologia %>%
+  filter(solo == "LV" & argila >= 20) %>%
+  select(solo, argila) %>%
+  View()
+
+# Faça um filtro para todos os PV com argila
+# >= a 20 ou os LVs com argila <= 10.
+geomorfologia %>%
+  filter(solo == "LV" & argila >= 20 |
+           str_detect(solo,"PV") & argila <= 10
+           ) %>%
+  View()
 
 #VERBO mutate
 # Criar a variável ARGILA+SILTE
+geomorfologia %>%
+  mutate(
+    argila_silte = argila + silte
+  ) %>% View()
 
 # Passar a CTC para a escala logarítmica
+geomorfologia %>%
+  mutate(
+    ctc_log10 = log10(ctc)
+  ) %>% View()
 
 # Classificar a CTC média (>=15) e baixa (<15)
+geomorfologia %>%
+  mutate(
+    ctc_class = ifelse(ctc >= 15,"média","baixa")
+  ) %>% View()
 
-# Classificar a CTC média (>=15) e baixa (<15 e >=6) e muito baixa (<6)
+# Classificar a CTC média (>=15) e baixa
+# (<15 e >=6) e muito baixa (<6)
+geomorfologia %>%
+  mutate(
+    ctc_class = case_when(
+      ctc < 6 ~ "muito baixa",
+      ctc < 15 ~ "baixa",
+      ctc >= 15 ~ "média"
+    )
+  ) %>%
+  View()
 
 # vamos eliminar as 4 últimas colunas
+geomorfologia %>% names()
+geomorfologia %>%
+  select( -(h_al:v)) %>%
+  View()
 
-# criando um novo banco de dados
+# Ordenar o banco de dados por teor de a
+# argila do menor para o maior
+geomorfologia %>%
+  arrange(argila) %>%
+  select(amostra, argila) %>%
+  View()
 
-# Ordenar o banco de dados por teor de a argila do menor para o
-# maior
+# Ordenar o banco de dados por teor de
+# argila do maior para o menor
+geomorfologia %>%
+  arrange(desc(argila)) %>%
+  select(amostra, argila) %>%
+  View()
+# Histograma para teor de argila
+geomorfologia %>%
+  filter(sup == "I") %>%
+  ggplot(aes(x=argila, y = ..density..)) +
+  geom_histogram(
+    bins = 7, # número de colunas do hist
+    color="black", # cor da borda
+    fill="gray", #preenchimento da coluna
+    ) +
+  labs(title="Meu Gráfico",
+       x = "Teor de Argila") +
+  geom_density(color="red",
+               fill="blue",
+               alpha = .10) +
+  theme_minimal()
 
-# Ordenar o banco de dados por teor de argila do maior para o
-# menor
+
+# Histograma para teor de areia
+geomorfologia %>%
+  mutate(areia = amg+ag+am+amf+af) %>%
+  filter(sup == "I") %>%
+  ggplot(aes(x=areia, y = ..density..)) +
+  geom_histogram(
+    bins = 7, # número de colunas do hist
+    color="black", # cor da borda
+    fill="pink", #preenchimento da coluna
+  ) +
+  labs(title="Meu Gráfico",
+       x = "Teor de Areia") +
+  geom_density(color="red",
+               fill="yellow",
+               alpha = .10) +
+  theme_minimal()
+
+
+# Histograma para teor de silte
+geomorfologia %>%
+  filter(sup == "I") %>%
+  ggplot(aes(x=silte, y = ..density..)) +
+  geom_histogram(
+    bins = 7, # número de colunas do hist
+    color="black", # cor da borda
+    fill="aquamarine4", #preenchimento da coluna
+  ) +
+  labs(title="Meu Gráfico",
+       x = "Teor de Silte") +
+  geom_density(color="red",
+               fill="purple",
+               alpha = .10) +
+  theme_minimal()
+
+# Boxplot
+geomorfologia %>%
+  ggplot(aes(y=argila, x=sup)) +
+  geom_boxplot()
+
+geomorfologia %>%
+  ggplot(aes(y=argila, x=solo, fill=sup)) +
+  geom_boxplot()
+
+geomorfologia %>%
+  ggplot(aes(y=argila, x=solo, fill=sup)) +
+  geom_boxplot()+
+  facet_wrap(~sup, nr=2, scale="free") +
+  ylim(0,30)+
+  scale_fill_viridis_d() +
+  theme_bw() +
+  labs(fill="Superfície") +
+  theme(
+    legend.position = "top"
+  )
+for(i in 1:10){
+  print("a vida é bela!!")
+  print(i)
+}
+
+# Imprimir o boxplot da argila
+# para cada solo
+
+
+
+solo_filtro <- geomorfologia %>%
+  pull(solo) %>%
+  unique()
+
+for(i in 1:8){
+  fs <- solo_filtro[i]
+  meu_box <- geomorfologia %>%
+    filter(solo == fs) %>%
+    ggplot(aes(y=argila)) +
+    geom_boxplot(fill="orange")+
+    labs(title = fs)
+  print(meu_box)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
