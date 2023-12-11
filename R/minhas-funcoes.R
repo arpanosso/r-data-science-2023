@@ -57,7 +57,7 @@ meu_tema <- function(){
                                 size=rel(2)),
       axis.title = element_text(color="blue",
                                 size=rel(1.5)),
-      panel.background = element_rect(fill="pink",
+      panel.background = element_rect(fill="linen",
                                       color="red"),
       axis.text.x = element_text(color="darkgreen",
                                  angle = 90,
