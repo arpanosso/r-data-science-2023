@@ -112,9 +112,52 @@ geomorfologia %>%
 
 ## Estruturas de repetição
 ## gerar sequências
+# criar uma sequência de 1 a 10
+1:10
+
+# criar uma sequência de 0 a 20 de 2 em 2
+seq(0,20,2)
+
+# criar uma sequência de 100 a 50 de 5 em 5
+seq(100,50,-5)
+
+# Tabuada do 7 usando o for
+for(i in 1:10){
+  print(paste0("7 x ",i," = ", i*7))
+}
+
+# Tabuada do 7 usando a função map, pacote purrr
+purrr::map_vec(1:10,
+           ~paste0("7x", .x, "=",.x*7))
 
 ## Construir gráfico de dispersão para cada
 ## superfície a partir das variáveis selecionadas
 ## anteriormente usando o for
+sups <- geomorfologia %>%
+  pull(sup) %>%
+  unique()
+
+for(i in 1:3){
+  filtro_sup <- sups[i]
+  my_plot <- geomorfologia %>%
+    filter(sup == filtro_sup) %>%
+    ggplot(aes(x=argila, y=ph))+
+    geom_point()+
+    labs(title = filtro_sup)
+  print(my_plot)
+}
 
 # usando a map do pacote purrr.
+purrr::map(sups,
+           ~{
+             filtro_sup <- .x
+             geomorfologia %>%
+               filter(sup == filtro_sup) %>%
+               ggplot(aes(x=argila, y=ph))+
+               geom_point()+
+               labs(title = filtro_sup)
+           })
+
+
+
+
