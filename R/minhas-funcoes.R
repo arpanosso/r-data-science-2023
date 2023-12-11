@@ -48,7 +48,23 @@ resumo_estatistico <- function(vetor){
 contar_nas <- function(vetor) sum(is.na(vetor))
 
 
-
+# função para definição do tema no ggplot
+meu_tema <- function(){
+  list(
+    theme(
+      plot.title = element_text(hjust = 1/2,
+                                color="red",
+                                size=rel(2)),
+      axis.title = element_text(color="blue",
+                                size=rel(1.5)),
+      panel.background = element_rect(fill="pink",
+                                      color="red"),
+      axis.text.x = element_text(color="darkgreen",
+                                 angle = 90,
+                                 size = rel(3))
+    )
+  )
+}
 
 
 
