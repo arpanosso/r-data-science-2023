@@ -126,18 +126,98 @@ geomorfologia %>%
     axis.text.y = element_text(size=rel(1.5))
   )
 
+# Distribuição Binomial
+n <- 3 # o número de realizações
+p <- 1/2 # chance de sucesso
+x <- 0:n
+px <- dbinom(x,n,p)
+sum(px)
+tibble(x, px) %>%
+  mutate(
+    acumulado = cumsum(px)
+  ) %>%
+  ggplot(aes(x=x,y=px)) +
+  geom_col(fill="lightblue",
+           color="black") +
+  theme_bw()
+
+pbinom(2,n,p) # acumula probabilidade até o valor 2
+qbinom(0.875,n,p) # retorna o x para uma acumulada de
+                  # 0.875
+
+rbinom(10000,n,p) %>%  hist() # gera a variáveis com
+                              # a distribuição
+
+# Distribuição amostral da Média
+x <- 0:6
+fx <- c(1000,50,400,250,320,700,100)
+
+va <- rep(x, fx)
+hist(va)
+mean(va)
+var(va)
+
+n<-5 # tamanho da amostra
+ams <- sample(va,n,replace = TRUE) # amostragem com reposição
+mean(ams) # média dos valores amostrados
+
+vetor_medias <- 0
+for(i in 1:100000){
+  ams <- sample(va,n,replace = TRUE)
+  vetor_medias[i] <- mean(ams)
+}
+hist(vetor_medias)
+mean(vetor_medias)
+var(vetor_medias)
+
+# teste de hipótese
+# Ler o banco de dados geomorfologia
+geomorfologia <- read_rds("data/geomorfologia.rds")
+glimpse(geomorfologia)
+
+arg_sup_1 <- geomorfologia %>%
+  filter(sup == "I") %>%
+  pull(argila)
+mean(arg_sup_1)
+
+arg_sup_2 <- geomorfologia %>%
+  filter(sup == "II") %>%
+  pull(argila)
+mean(arg_sup_2)
+
+# Teste entre I e II
+t.test(arg_sup_1,arg_sup_2,
+      alternative = "t",
+      var.equal = TRUE)
+
+# Teste entre I e III
+arg_sup_3 <- geomorfologia %>%
+  filter(sup == "III") %>%
+  pull(argila)
+mean(arg_sup_3)
+
+t.test(arg_sup_1,arg_sup_3,
+       alternative = "t",
+       var.equal = TRUE)
+
+# Teste entre II e III
+t.test(arg_sup_2,arg_sup_3,
+       alternative = "t",
+       var.equal = TRUE)
 
 
+# Será o valor médio do teor de argila
+# na superfície I igual a 25 ?
+t.test(arg_sup_1, mu=25,
+       alternative = "l",
+       conf.level = 0.99)
 
+#intervalo de confiança.
+t.test(arg_sup_1, mu=mean(arg_sup_1),
+       alternative = "t",
+       conf.level = 0.99)
 
-
-
-
-
-
-
-
-
-
-
+t.test(arg_sup_1, mu=mean(arg_sup_1),
+       alternative = "t",
+       conf.level = 0.95)
 

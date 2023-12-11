@@ -65,12 +65,3 @@ meu_tema <- function(){
     )
   )
 }
-
-
-
-
-
-
-
-
-
