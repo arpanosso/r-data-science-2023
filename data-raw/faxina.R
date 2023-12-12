@@ -60,4 +60,13 @@ df[-(4:5)]
 library(readr)
 write_rds(df,"data/dados_alunos.rds")
 
+###
+dados <- readxl::read_xlsx("data-raw/Pasta1.xlsx") %>%
+  janitor::clean_names()
 
+dados %>%
+  mutate(
+    trat = str_to_lower(trat),
+    trat = str_replace(trat,"\\.","_")
+  )
+write_rds(dados,"data/dados_dbc.rds")

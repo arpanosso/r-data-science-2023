@@ -10,129 +10,129 @@ geomorfologia <- read_rds("data/geomorfologia.rds")
 glimpse(geomorfologia)
 
 # Construir o boxplot para visualizar a variabilidade
-# do teor de argila para as diferentes superfícies
+# do teor de ctc para as diferentes superfícies
 geomorfologia %>%
-  ggplot(aes(x=sup, y=argila)) +
+  ggplot(aes(x=sup, y=ctc)) +
   geom_boxplot(fill="gray") +
   geom_jitter(size=1.3) + # adiciona os pontos no boxplot
   theme_bw()
 
-# Comparar a variância do teor de argila do solo
+# Comparar a variância do teor de ctc do solo
 # para as superfícies, duas a duas.
-arg_sup_1 <- geomorfologia %>%
+ctc_sup_1 <- geomorfologia %>%
   filter(sup == "I") %>%
-  pull(argila)
+  pull(ctc)
 
-arg_sup_2 <- geomorfologia %>%
+ctc_sup_2 <- geomorfologia %>%
   filter(sup == "II") %>%
-  pull(argila)
+  pull(ctc)
 
-arg_sup_3 <- geomorfologia %>%
+ctc_sup_3 <- geomorfologia %>%
   filter(sup == "III") %>%
-  pull(argila)
+  pull(ctc)
 
 
 # Fazer o test F para sup 1 vs 2
-var.test(arg_sup_2,arg_sup_1,
+var.test(ctc_sup_2,ctc_sup_1,
          alternative = "g",
          conf.level = 0.95)
 # Conclusão: rejeitamos H0 ao nível de 5% de signifi-
-# cância e concluímos que a variância do teor de argi-
+# cância e concluímos que a variância do teor de ctc-
 # la é maior para a superfície 2. Ou seja, são
 # heterocedásticas.
 
 # Fazer o test F para sup 1 vs 3
-var.test(arg_sup_3,arg_sup_1,
+var.test(ctc_sup_3,ctc_sup_1,
          alternative = "g",
          conf.level = 0.95)
 # Conclusão: rejeitamos H0 ao nível de 5% de signifi-
-# cância e concluímos que a variância do teor de argi-
+# cância e concluímos que a variância do teor de ctc-
 # la é maior para a superfície 3. Ou seja, são
 # heterocedásticas.
 
 # Fazer o test F para sup 2 vs 3
-var.test(arg_sup_2,arg_sup_3,
+var.test(ctc_sup_2,ctc_sup_3,
          alternative = "g",
          conf.level = 0.95)
 # Conclusão: rejeitamos H0 ao nível de 5% de signifi-
-# cância e concluímos que a variância do teor de argi-
+# cância e concluímos que a variância do teor de ctc-
 # la é maior para a superfície 2. Ou seja, são
 # heterocedásticas.
 
 # Teste de comparação de médias.
-t.test(arg_sup_1, arg_sup_2,
+t.test(ctc_sup_1, ctc_sup_2,
        alternative = "t",
        var.equal = FALSE,
        conf.level = 0.95)
 # Conclusão: rejeitamos H0 ao nível de 5% de signifi-
-# cância e concluímos que as médias do teor de argila
+# cância e concluímos que as médias do teor de ctc
 # para as superfícies I e II são diferentes.
 
-# Construa o histograma para argila em cada superfície
+# Construa o histograma para ctc em cada superfície
 # realize o teste de normalidade:
-# alpha = 5%, ou seja, se p<0.05 rejeitamos H0
+# alctca = 5%, ou seja, se p<0.05 rejeitamos H0
 # H0: Dados tem distribuição normal
 # H1: Dados não tem ditribuição normal
 ## Superfície I
 geomorfologia %>%
   filter(sup == "I") %>%
-  ggplot(aes(x=argila, y=..density..)) +
+  ggplot(aes(x=ctc, y=..density..)) +
   geom_histogram(bins=7,color="black",fill="linen")
-arg_sup_1 %>%  shapiro.test()
-arg_sup_1 %>%  nortest::ad.test()
-arg_sup_1 %>%  nortest::cvm.test()
-arg_sup_1 %>%  nortest::lillie.test()
+ctc_sup_1 %>%  shapiro.test()
+ctc_sup_1 %>%  nortest::ad.test()
+ctc_sup_1 %>%  nortest::cvm.test()
+ctc_sup_1 %>%  nortest::lillie.test()
 # Conclusão: Não rejeitamos H0 ao nível de 1% de sig-
 # nificância e concluímos que os dados de teor de
-# argila para superfície I seguem distribuição
+# ctc para superfície I seguem distribuição
 # normal.
 
 ## Superfície II
 geomorfologia %>%
   filter(sup == "II") %>%
-  ggplot(aes(x=argila, y=..density..)) +
+  ggplot(aes(x=ctc, y=..density..)) +
   geom_histogram(bins=15,color="black",fill="orange")
-arg_sup_2 %>%  shapiro.test()
-arg_sup_2 %>%  nortest::ad.test()
-arg_sup_2 %>%  nortest::cvm.test()
-arg_sup_2 %>%  nortest::lillie.test()
+ctc_sup_2 %>%  shapiro.test()
+ctc_sup_2 %>%  nortest::ad.test()
+ctc_sup_2 %>%  nortest::cvm.test()
+ctc_sup_2 %>%  nortest::lillie.test()
 # Conclusão: Rejeitamos H0 ao nível de 1% de sig-
 # nificância e concluímos que os dados de teor de
-# argila para superfície II não seguem distribuição
+# ctc para superfície II não seguem distribuição
 # normal.
 
 ## Superfície III
 geomorfologia %>%
   filter(sup == "III") %>%
-  ggplot(aes(x=argila, y=..density..)) +
+  ggplot(aes(x=ctc, y=..density..)) +
   geom_histogram(bins=15,color="black",fill="salmon")
-arg_sup_3 %>%  shapiro.test()
-arg_sup_3 %>%  nortest::ad.test()
-arg_sup_3 %>%  nortest::cvm.test()
-arg_sup_3 %>%  nortest::lillie.test()
+ctc_sup_3 %>%  shapiro.test()
+ctc_sup_3 %>%  nortest::ad.test()
+ctc_sup_3 %>%  nortest::cvm.test()
+ctc_sup_3 %>%  nortest::lillie.test()
 # Conclusão: Não rejeitamos H0 ao nível de 1% de sig-
 # nificância e concluímos que os dados de teor de
-# argila para superfície III seguem distribuição
+# ctc para superfície III seguem distribuição
 # normal.
 
 # Calcule a interprete os coeficientes de assimetria
 # e curtose para cada superfície.
-arg_sup_1 %>% agricolae::skewness()
-arg_sup_1 %>% agricolae::kurtosis()
+ctc_sup_1 %>% agricolae::skewness()
+ctc_sup_1 %>% agricolae::kurtosis()
 
-arg_sup_2 %>% agricolae::skewness()
-arg_sup_2 %>% agricolae::kurtosis()
+ctc_sup_2 %>% agricolae::skewness()
+ctc_sup_2 %>% agricolae::kurtosis()
 
-arg_sup_3 %>% agricolae::skewness()
-arg_sup_3 %>% agricolae::kurtosis()
+ctc_sup_3 %>% agricolae::skewness()
+ctc_sup_3 %>% agricolae::kurtosis()
 
 # Realizar a análise de variância para um modelo
 # inteiramente casualizado para estudar o efeito
-# das superfícies nos teores de argila do solo.
-modelo <- aov(argila_t ~ sup,
+# das superfícies nos teores de ctc do solo.
+modelo <- aov(ctc_t ~ sup,
               data = geomorfologia %>%
                 mutate(sup = as_factor(sup),
-                       argila_t = argila^(0.626))
+                       ctc_t = ctc^(-1.23))
               )
 modelo
 anova(modelo) # sem efeito.
@@ -141,14 +141,14 @@ anova(modelo) # sem efeito.
 ## Normalidade dos erros
 diag <- geomorfologia %>%
   mutate(
-    rs_argila = rstudent(modelo), # extrair residuos
-    pred_argila = predict(modelo) # calcular preditos
+    rs_ctc = rstudent(modelo), # extrair residuos
+    pred_ctc = predict(modelo) # calcular preditos
   ) %>%
-  select(sup, argila, rs_argila, pred_argila)
+  select(sup, ctc, rs_ctc, pred_ctc)
 
 ## Construa o QQ plot
 diag %>%
-  ggplot(aes(sample=rs_argila)) +
+  ggplot(aes(sample=rs_ctc)) +
   stat_qq() +
   stat_qq_line(color="blue") +
   theme_bw()
@@ -158,7 +158,7 @@ diag %>%
 
 ## Estudo de outliers
 diag %>%
-  ggplot(aes(x = pred_argila, y= rs_argila)) +
+  ggplot(aes(x = pred_ctc, y= rs_ctc)) +
   geom_point() +
   ylim(-4,4) +
   geom_hline(yintercept = c(-3,3),
@@ -168,23 +168,23 @@ diag %>%
 
 ## Histograma dos resíduos
 diag %>%
-  ggplot(aes(x=rs_argila, y=..density..)) +
+  ggplot(aes(x=rs_ctc, y=..density..)) +
   geom_histogram(bins = 7,color="black",fill="gray") +
   theme_bw()
-diag %>% pull(rs_argila) %>% shapiro.test()
-diag %>% pull(rs_argila) %>% nortest::ad.test()
-diag %>% pull(rs_argila) %>% nortest::cvm.test()
-diag %>% pull(rs_argila) %>% nortest::lillie.test()
+diag %>% pull(rs_ctc) %>% shapiro.test()
+diag %>% pull(rs_ctc) %>% nortest::ad.test()
+diag %>% pull(rs_ctc) %>% nortest::cvm.test()
+diag %>% pull(rs_ctc) %>% nortest::lillie.test()
 
 ## Homocedasticidade
-argila <- diag %>% pull(argila)
+ctc <- diag %>% pull(ctc)
 sup <- diag %>% pull(sup) %>% as_factor()
-argila_t <- argila^(0.626)
-lawstat::levene.test(argila_t, sup)
-lawstat::levene.test(argila_t, sup,location = "mean")
-bartlett.test(argila_t,sup)
+ctc_t <- ctc^(-1.23)
+lawstat::levene.test(ctc_t, sup)
+lawstat::levene.test(ctc_t, sup,location = "mean")
+bartlett.test(ctc_t,sup)
 # Conclusão: rejeitamos H0 ao nível de 5% de probabi-
-# lidade e concluímos que os dados de teor de argila
+# lidade e concluímos que os dados de teor de ctc
 # não tem variância comum, ou seja, não são
 # homocedásticos.
 
@@ -198,26 +198,26 @@ bartlett.test(argila_t,sup)
 df_aux <- diag %>%
   group_by(sup) %>%
   summarise(
-    arg_media = mean(argila, na.rm = TRUE),
-    arg_var = var(argila, na.rm = TRUE),
-    log_arg_media = log(arg_media),
-    log_arg_var = log(arg_var)
+    ctc_media = mean(ctc, na.rm = TRUE),
+    ctc_var = var(ctc, na.rm = TRUE),
+    log_ctc_media = log(ctc_media),
+    log_ctc_var = log(ctc_var)
   )
 
 df_aux %>%
-  ggplot(aes(x=log_arg_media,y=log_arg_var))+
+  ggplot(aes(x=log_ctc_media,y=log_ctc_var))+
   geom_point() +
   theme_bw() +
   geom_smooth(method = "lm", se=FALSE)
 
-modelo_reg <- lm(log_arg_var ~ log_arg_media,
+modelo_reg <- lm(log_ctc_var ~ log_ctc_media,
                  data = df_aux)
 summary.lm(modelo_reg)
 ## Conclusão: Não rejeitamos H0 para o teste
 ## t ao nível de 5% de probabilidade, indicando
 ## que não existe uma relação linear entre
-## o log da média de argila e o logo da variância
-## de argila. Portanto, concluímos que a
+## o log da média de ctc e o logo da variância
+## de ctc. Portanto, concluímos que a
 ## heterocedasticidade é irregular.
 obj <- MASS::boxcox(modelo)
 str(obj)
