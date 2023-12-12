@@ -62,9 +62,7 @@ write_rds(df,"data/dados_alunos.rds")
 
 ###
 dados <- readxl::read_xlsx("data-raw/Pasta1.xlsx") %>%
-  janitor::clean_names()
-
-dados %>%
+  janitor::clean_names() %>%
   mutate(
     trat = str_to_lower(trat),
     trat = str_replace(trat,"\\.","_")
