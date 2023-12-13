@@ -1,3 +1,5 @@
+library(tidyverse)
+
 # Script Para Faxina de Dados
 df <- read.table("data-raw/alunos.txt",
            h = TRUE)
@@ -68,3 +70,12 @@ dados <- readxl::read_xlsx("data-raw/Pasta1.xlsx") %>%
     trat = str_replace(trat,"\\.","_")
   )
 write_rds(dados,"data/dados_dbc.rds")
+
+##
+dados <- readxl::read_xlsx("data-raw/dados_prod_cana.xlsx") %>%
+  janitor::clean_names() %>%
+  mutate(
+    trat = str_to_lower(trat),
+    trat = str_replace(trat,"\\.","_")
+  )
+write_rds(dados,"data/dados_dic.rds")
