@@ -79,3 +79,14 @@ dados <- readxl::read_xlsx("data-raw/dados_prod_cana.xlsx") %>%
     trat = str_replace(trat,"\\.","_")
   )
 write_rds(dados,"data/dados_dic.rds")
+
+
+##
+dados <- readxl::read_xlsx("data-raw/dados_altura_mudas.xlsx") %>%
+  janitor::clean_names()
+write_rds(dados,"data/altura_mudas_dic.rds")
+
+
+dados <- readxl::read_xlsx("data-raw/dados_prod_milho_inset_dose.xlsx") %>%
+  janitor::clean_names()
+write_rds(dados,"data/milho_inset_dose.rds")
