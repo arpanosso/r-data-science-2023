@@ -197,11 +197,44 @@ as.tibble(obj) %>%
 # 4 inseticidas em 2 doses diferentes sobre a produção da
 # cultura do milho em kg/parcela.
 # Entrar com os dados
-inset_dose <-read_rds("data/milho_inset_dose.rds")
+inset_dose <-read_rds("data/milho_inset_dose.rds") %>%
+  mutate(
+    trat = interaction(inseticida,dose)
+  )
 
 # Criar tabela de médias
+tab_media <- inset_dose %>%
+  group_by(inseticida,dose) %>%
+  summarise(
+    media = mean(y,na.rm = TRUE)
+  )
 
 # criar gráfico da interação
+tab_media %>%
+  ggplot(aes(x=inseticida, y =media,
+             color=as_factor(dose))) +
+  geom_point()+
+  geom_line()+
+  theme_bw()
+
+
+tab_media %>%
+  ggplot(aes(x=dose, y =media,
+             color=as_factor(inseticida))) +
+  geom_point()+
+  geom_line()+
+  theme_bw()
+
 # Realizar o Diagnostico da ANOVa utilizando o delineamento
 # de tratamentos (DIC no caso)
 # Realizar a Análise de Variância
+inseticida <- inset_dose %>% pull(inseticida) %>%
+  as_factor()
+
+dose <- inset_dose %>% pull(dose) %>%
+  as_factor()
+
+y <- inset_dose %>% pull(y)
+
+ExpDes.pt::fat2.dic(inseticida,dose,y,
+                    fac.names = c("Ins","Dose"))
