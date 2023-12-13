@@ -227,6 +227,70 @@ tab_media %>%
 
 # Realizar o Diagnostico da ANOVa utilizando o delineamento
 # de tratamentos (DIC no caso)
+inset_dose %>%
+  ggplot(aes(x=trat, y=y)) +
+  geom_boxplot(fill="gray") +
+  geom_jitter(size=1.3) + # adiciona os pontos no boxplot
+  theme_bw()
+
+# Realizar a análise de variância para um modelo
+# inteiramente casualizado para estudar o efeito
+# de trat nos valores de y.
+modelo <- aov(y ~ trat,
+              data = inset_dose %>%
+                mutate(
+                  trat = as_factor(trat),
+                  # y_t = y^(1-1.5423/2),
+                  # y_bc = log(y)
+                )
+)
+modelo
+anova(modelo) # sem efeito.
+
+## Normalidade dos erros
+diag <- inset_dose %>%
+  mutate(
+    rs_y = rstudent(modelo), # extrair residuos
+    pred_y = predict(modelo) # calcular preditos
+  ) #%>%
+#select(sup, argila, rs_argila, pred_argila)
+
+## Construa o QQ plot
+diag %>%
+  ggplot(aes(sample=rs_y)) +
+  stat_qq() +
+  stat_qq_line(color="blue") +
+  theme_bw()
+
+## Estudo de outliers
+diag %>%
+  ggplot(aes(x = pred_y, y= rs_y)) +
+  geom_point() +
+  # ylim(-4,4) +
+  geom_hline(yintercept = c(-3,3),
+             color="red",
+             linetype = 2) +
+  theme_bw()
+
+## Histograma dos resíduos
+diag %>%
+  ggplot(aes(x=rs_y, y=..density..)) +
+  geom_histogram(bins = 10,color="black",fill="gray") +
+  theme_bw()
+diag %>% pull(rs_y) %>% shapiro.test()
+diag %>% pull(rs_y) %>% nortest::ad.test()
+diag %>% pull(rs_y) %>% nortest::cvm.test()
+diag %>% pull(rs_y) %>% nortest::lillie.test()
+
+## Homocedasticidade
+y <- diag %>% pull(y)
+trat <- diag %>% pull(trat) %>% as_factor()
+
+lawstat::levene.test(y, trat)
+lawstat::levene.test(y, trat,location = "mean")
+bartlett.test(y, trat)
+# Conclusão:
+
 # Realizar a Análise de Variância
 inseticida <- inset_dose %>% pull(inseticida) %>%
   as_factor()
