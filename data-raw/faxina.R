@@ -90,3 +90,13 @@ write_rds(dados,"data/altura_mudas_dic.rds")
 dados <- readxl::read_xlsx("data-raw/dados_prod_milho_inset_dose.xlsx") %>%
   janitor::clean_names()
 write_rds(dados,"data/milho_inset_dose.rds")
+
+
+dados <- readxl::read_xlsx("data-raw/dados_prod_soja.xlsx") %>%
+  janitor::clean_names() %>%
+  mutate(
+    epoca = paste0("e",epoca),
+    variedade = paste0("v",variedade)
+  )
+
+write_rds(dados,"data/soja_dbc.rds")
